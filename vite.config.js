@@ -8,7 +8,7 @@ import cssInjectedByJs from 'vite-plugin-css-injected-by-js'
 export default defineConfig({
   plugins: [
     vue(),
-    dts({ insertTypesEntry: true }),
+    dts({ insertTypesEntry: true, rollupTypes: true }),
     cssInjectedByJs()
   ],
   build: {

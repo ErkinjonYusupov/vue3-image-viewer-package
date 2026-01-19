@@ -1,4 +1,3 @@
-import ImageViewer from './components/ImageViewer.vue';
 import { showImage } from './function.js';
 
 export { showImage };

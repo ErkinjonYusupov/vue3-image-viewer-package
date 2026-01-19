@@ -3,6 +3,10 @@ import ImageViewer from './components/ImageViewer.vue';
 
 const container = typeof document !== 'undefined' ? document.createElement('div') : null;
 
+/**
+ * Programmatically show the image viewer.
+ * @param {string|string[]|object} options - Image source URL, array of URLs, or options object
+ */
 export function showImage(options) {
     if (!container) return;
 
