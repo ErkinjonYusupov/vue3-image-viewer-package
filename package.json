@@ -10,6 +10,7 @@
   "module": "./dist/vue3-image-viewer.es.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/vue3-image-viewer.es.js",
       "require": "./dist/vue3-image-viewer.umd.js"
     },
