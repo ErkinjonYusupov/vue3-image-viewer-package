@@ -1,8 +1,10 @@
 <script setup>
-import { showImage } from './index.js'; // Importing from local index to test export
+import { showImage } from 'vue3-image-viewer-package-erkinjon';
+
+
 
 const images = [
-  'https://images.unsplash.com/photo-1682687220208-22d7a2543e88?q=80&w=1975&auto=format&fit=crop',
+  'https://www.gstatic.com/webp/gallery/1.webp',
   'https://images.unsplash.com/photo-1682685797769-481b48222adf?q=80&w=1975&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1682695796954-bad0d0f59ff1?q=80&w=1975&auto=format&fit=crop',
   'https://images.unsplash.com/photo-1682685797661-9e0c8c184851?q=80&w=1975&auto=format&fit=crop'
@@ -25,8 +27,7 @@ const images = [
 
     <div style="margin-top: 2rem;">
       <h3>Programmatic Single Image</h3>
-      <button
-        @click="showImage('https://images.unsplash.com/photo-1682687220208-22d7a2543e88?q=80&w=1975&auto=format&fit=crop')">
+      <button @click="showImage('https://www.gstatic.com/webp/gallery/1.webp')">
         Open Single Image
       </button>
     </div>

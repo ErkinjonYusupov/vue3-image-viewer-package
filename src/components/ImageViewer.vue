@@ -341,6 +341,7 @@ const stopDrag = () => {
     border-radius: 50%;
     width: 48px;
     height: 48px;
+    padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
