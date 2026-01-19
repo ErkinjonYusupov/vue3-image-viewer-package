@@ -20,34 +20,9 @@ npm install vue3-image-viewer-package-erkinjon
 
 ## Usage
 
-### Global Installation (Optional)
 
-You can install the plugin globally to use `$showImage` anywhere in your app.
 
-```javascript
-import { createApp } from 'vue';
-import App from './App.vue';
-import Vue3ImageViewer from 'vue3-image-viewer-package-erkinjon';
-import 'vue3-image-viewer-package-erkinjon/style.css'; // Don't forget CSS!
-
-const app = createApp(App);
-app.use(Vue3ImageViewer);
-app.mount('#app');
-```
-
-And then in your components:
-
-```javascript
-// Composition API
-import { getCurrentInstance } from 'vue';
-const { proxy } = getCurrentInstance();
-proxy.$showImage('https://example.com/img.jpg');
-
-// Options API
-this.$showImage('https://example.com/img.jpg');
-```
-
-### Programmatic Usage (Recommended)
+### Programmatic Usage
 
 Import the `showImage` function in your Vue 3 application.
 
