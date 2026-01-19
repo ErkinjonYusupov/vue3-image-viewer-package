@@ -1,7 +1,7 @@
 {
   "name": "vue3-image-viewer-package-erkinjon",
   "private": false,
-  "version": "0.0.1",
+  "version": "1.0.5",
   "type": "module",
   "files": [
     "dist"
@@ -16,6 +16,7 @@
     "./style.css": "./dist/vue3-image-viewer-package-erkinjon.css"
   },
   "style": "./dist/vue3-image-viewer-package-erkinjon.css",
+  "types": "./dist/index.d.ts",
   "peerDependencies": {
     "vue": "^3.0.0"
   },
@@ -25,10 +26,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.5.24"
+    "vue": "^3.0.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
-    "vite": "^7.2.4"
+    "vite": "^7.2.4",
+    "vite-plugin-css-injected-by-js": "^3.5.2",
+    "vite-plugin-dts": "^4.5.4"
   }
 }

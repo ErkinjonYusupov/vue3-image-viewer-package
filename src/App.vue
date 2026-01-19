@@ -1,35 +1,44 @@
 <script setup>
-import { ref } from 'vue';
-import ImageViewer from './components/ImageViewer.vue';
+import { showImage } from './index.js'; // Importing from local index to test export
 
-const showViewer = ref(false);
-const imageSrc = ref('https://images.unsplash.com/photo-1682687220208-22d7a2543e88?q=80&w=1975&auto=format&fit=crop');
-
-const openViewer = () => {
-  showViewer.value = true;
-};
+const images = [
+  'https://images.unsplash.com/photo-1682687220208-22d7a2543e88?q=80&w=1975&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1682685797769-481b48222adf?q=80&w=1975&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1682695796954-bad0d0f59ff1?q=80&w=1975&auto=format&fit=crop',
+  'https://images.unsplash.com/photo-1682685797661-9e0c8c184851?q=80&w=1975&auto=format&fit=crop'
+];
 </script>
 
 <template>
   <div class="container">
-    <h1>Vue 3 ImageViewer Demo</h1>
-    <p>Click the image below to open the viewer.</p>
+    <h1>Vue 3 ImageViewer Gallery</h1>
+    <p>Click any image to open the gallery viewer.</p>
 
-    <div class="image-wrapper" @click="openViewer">
-      <img :src="imageSrc" alt="Sample Logic" class="thumbnail" />
-      <div class="overlay">
-        <span>Click to View</span>
+    <div class="gallery-grid">
+      <div v-for="(img, index) in images" :key="index" class="image-wrapper" @click="showImage(images, index)">
+        <img :src="img" class="thumbnail" />
+        <div class="overlay">
+          <span>View</span>
+        </div>
       </div>
     </div>
 
-    <ImageViewer v-model="showViewer" :src="imageSrc" />
+    <div style="margin-top: 2rem;">
+      <h3>Programmatic Single Image</h3>
+      <button
+        @click="showImage('https://images.unsplash.com/photo-1682687220208-22d7a2543e88?q=80&w=1975&auto=format&fit=crop')">
+        Open Single Image
+      </button>
+    </div>
+
+
   </div>
 </template>
 
 <style scoped>
 .container {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  max-width: 800px;
+  max-width: 1000px;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -42,25 +51,31 @@ h1 {
   margin-bottom: 0.5em;
 }
 
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
 .image-wrapper {
   position: relative;
-  display: inline-block;
   cursor: pointer;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  aspect-ratio: 16/9;
   transition: transform 0.2s;
 }
 
 .image-wrapper:hover {
-  transform: scale(1.02);
+  transform: translateY(-5px);
 }
 
 .thumbnail {
-  display: block;
-  max-width: 100%;
-  width: 400px;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   border-radius: 12px;
 }
 

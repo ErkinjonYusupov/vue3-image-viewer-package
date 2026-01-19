@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 
 const props = defineProps({
     modelValue: {
@@ -8,27 +8,31 @@ const props = defineProps({
     },
     src: {
         type: String,
-        required: true
+        default: ''
+    },
+    images: {
+        type: Array,
+        default: () => []
+    },
+    index: {
+        type: Number,
+        default: 0
     }
 });
 
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(['update:modelValue', 'update:index']);
 
 const scale = ref(1);
 const rotation = ref(0);
 
-// Reset state when opened
-watch(
-    () => props.modelValue,
-    (val) => {
-        if (val) {
-            reset();
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = '';
-        }
-    }
-);
+const isSingleMode = computed(() => props.images.length === 0);
+const currentSrc = computed(() => {
+    if (isSingleMode.value) return props.src;
+    return props.images[props.index] || '';
+});
+
+const hasPrev = computed(() => !isSingleMode.value && props.images.length > 1);
+const hasNext = computed(() => !isSingleMode.value && props.images.length > 1);
 
 const close = () => {
     emit('update:modelValue', false);
@@ -40,6 +44,42 @@ const reset = () => {
     translateX.value = 0;
     translateY.value = 0;
 };
+
+const next = () => {
+    if (isSingleMode.value) return;
+    const newIndex = (props.index + 1) % props.images.length;
+    emit('update:index', newIndex);
+};
+
+const prev = () => {
+    if (isSingleMode.value) return;
+    const newIndex = (props.index - 1 + props.images.length) % props.images.length;
+    emit('update:index', newIndex);
+};
+
+const handleKeydown = (e) => {
+    if (!props.modelValue) return;
+    if (e.key === 'Escape') close();
+    if (e.key === 'ArrowRight') next();
+    if (e.key === 'ArrowLeft') prev();
+};
+
+// Reset state when opened or image changes
+watch(
+    () => props.modelValue,
+    (val) => {
+        if (val) {
+            reset();
+            document.body.style.overflow = 'hidden';
+            window.addEventListener('keydown', handleKeydown);
+        } else {
+            document.body.style.overflow = '';
+            window.removeEventListener('keydown', handleKeydown);
+        }
+    }
+);
+
+watch(() => props.index, reset);
 
 const rotateLeft = () => {
     rotation.value -= 90;
@@ -104,9 +144,24 @@ const stopDrag = () => {
     <Teleport to="body">
         <Transition name="iv-fade">
             <div v-if="modelValue" class="iv-overlay" @click.self="close" @wheel.prevent="handleWheel">
+                <!-- Navigation Buttons -->
+                <button v-if="hasPrev" class="iv-nav-btn iv-prev" @click.stop="prev" title="Previous">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </button>
+
+                <button v-if="hasNext" class="iv-nav-btn iv-next" @click.stop="next" title="Next">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+
                 <!-- Image Container -->
                 <div class="iv-content">
-                    <img :src="src" class="iv-image" :style="{
+                    <img :src="currentSrc" class="iv-image" :style="{
                         transform: `translate(${translateX}px, ${translateY}px) rotate(${rotation}deg) scale(${scale})`,
                         cursor: isDragging ? 'grabbing' : 'grab'
                     }" @click.stop @mousedown="startDrag" />
@@ -275,5 +330,36 @@ const stopDrag = () => {
 .iv-fade-enter-from,
 .iv-fade-leave-to {
     opacity: 0;
+}
+
+.iv-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    cursor: pointer;
+    z-index: 10001;
+    transition: all 0.2s;
+}
+
+.iv-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.iv-prev {
+    left: 20px;
+}
+
+.iv-next {
+    right: 20px;
 }
 </style>

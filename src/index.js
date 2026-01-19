@@ -1,9 +1,11 @@
 import ImageViewer from './components/ImageViewer.vue';
+import { showImage } from './function.js';
 
-export { ImageViewer };
+export { showImage };
 
 export default {
     install: (app) => {
-        app.component('ImageViewer', ImageViewer);
+        app.config.globalProperties.$showImage = showImage;
+        showImage._context = app._context;
     }
 };

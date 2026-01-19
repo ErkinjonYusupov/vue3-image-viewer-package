@@ -1,10 +1,16 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import dts from 'vite-plugin-dts'
+import cssInjectedByJs from 'vite-plugin-css-injected-by-js'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [
+    vue(),
+    dts({ insertTypesEntry: true }),
+    cssInjectedByJs()
+  ],
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/index.js'),
@@ -20,11 +26,6 @@ export default defineConfig({
         // for externalized deps
         globals: {
           vue: 'Vue'
-        },
-        // Ensure CSS is extracted
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name === 'style.css') return 'vue3-image-viewer.css';
-          return assetInfo.name;
         }
       }
     }
